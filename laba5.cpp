@@ -100,25 +100,6 @@ void clearMemory(Date* date) {
     delete[] date;
 }
 
-// Фкнуция удаления даты из массива структур date
-void removeDateFromArray(Date* dates, unsigned int size, unsigned int element) {
-    for (unsigned int i = element; i < size - 1; i++) {
-        Date tmpdate = dates[i];
-        dates[i] = dates[i + 1];
-        dates[i + 1] = tmpdate;
-    }
-    Date* tmpDates = new Date[size - 1];
-    for (int i = 0; i < size - 1; i++) {
-        tmpDates[i] = dates[i];
-    }
-    delete[] dates;
-    dates = new Date[size - 1];
-    for (int i = 0; i < size - 1; i++) {
-        dates[i] = tmpDates[i];
-    }
-    delete[] tmpDates;
-}
-
 // Вывод общей информации о пользовании командами для ввода в консоль
 void printInformation() {
     cout << "Here's what you can do with dates you have just typed in:" << endl;
@@ -235,28 +216,33 @@ int main()
 
             break;
         case '5':  // удалить дату из массива
-            unsigned int elemToDelete;
-            cout << "Which element do you want to delete?" << endl;
-            cin >> elemToDelete;
-            // блок в котором удаляется выбранный элемент из массива, размер массива при этом уменьшается на один
-            {
-                for (unsigned int i = elemToDelete - 1; i < size - 1; i++) {
-                    Date tmpdate = dates[i];
-                    dates[i] = dates[i + 1];
-                    dates[i + 1] = tmpdate;
+            if (size != 0) {
+                unsigned int elemToDelete;
+                cout << "Which element do you want to delete?" << endl;
+                cin >> elemToDelete;
+                // блок в котором удаляется выбранный элемент из массива, размер массива при этом уменьшается на один
+                {
+                    for (unsigned int i = elemToDelete - 1; i < size - 1; i++) {
+                        Date tmpdate = dates[i];
+                        dates[i] = dates[i + 1];
+                        dates[i + 1] = tmpdate;
+                    }
+                    Date* tmpDates = new Date[size - 1];
+                    for (int i = 0; i < size - 1; i++) {
+                        tmpDates[i] = dates[i];
+                    }
+                    delete[] dates;
+                    dates = new Date[size - 1];
+                    for (int i = 0; i < size - 1; i++) {
+                        dates[i] = tmpDates[i];
+                    }
+                    delete[] tmpDates;
                 }
-                Date* tmpDates = new Date[size - 1];
-                for (int i = 0; i < size - 1; i++) {
-                    tmpDates[i] = dates[i];
-                }
-                delete[] dates;
-                dates = new Date[size - 1];
-                for (int i = 0; i < size - 1; i++) {
-                    dates[i] = tmpDates[i];
-                }
-                delete[] tmpDates;
+                size--;
             }
-            size--;
+            else {
+                cout << "There are no dates in list" << endl;
+            }
             break;
         case '6':  // вывести все даты в стандартном формате.
             cout << "All dates you have entered:" << endl;
